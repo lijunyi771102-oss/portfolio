@@ -15,7 +15,12 @@
   </aside>
 
   <main>
-    <h1>项目展示</h1>
+    <div class="header">
+      <h1>项目展示</h1>
+      <div class="toolbar">
+        <input type="text" id="search" placeholder="🔍 搜索项目..." />
+      </div>
+    </div>
     <div id="app"></div>
   </main>
 
@@ -27,14 +32,20 @@
           {
             title: "项目名称一",
             desc: "项目简短描述",
-            thumbnail: "thumbnails/project1.png",
+            thumbnail: "https://via.placeholder.com/300x200/2e2e2e/666?text=Project+1",
             link: "https://github.com/lijunyi771102-oss"
           },
           {
             title: "项目名称二",
-            desc: "项目简短描述",
-            thumbnail: "thumbnails/project2.png",
+            desc: "另一个项目的描述",
+            thumbnail: "https://via.placeholder.com/300x200/2e2e2e/666?text=Project+2",
             link: "https://github.com/lijunyi771102-oss"
+          },
+          {
+            title: "项目名称三",
+            desc: "第三个项目",
+            thumbnail: "https://via.placeholder.com/300x200/2e2e2e/666?text=Project+3",
+            link: "#"
           }
         ]
       },
@@ -43,37 +54,53 @@
         items: [
           {
             title: "笔记一",
-            desc: "笔记描述",
-            thumbnail: "thumbnails/note1.png",
+            desc: "学习笔记描述",
+            thumbnail: "https://via.placeholder.com/300x200/2e2e2e/666?text=Note+1",
             link: "#"
           }
         ]
       }
     ];
 
-    const app = document.getElementById('app');
-    app.innerHTML = data.map(group => `
-      <section>
-        <div class="group-header">
-          <span class="arrow">▾</span>
-          <span class="group-title">${group.category}</span>
-          <span class="count">${group.items.length}</span>
-        </div>
-        <div class="grid">
-          ${group.items.map(item => `
-            <a class="card" href="${item.link}" target="_blank">
-              <div class="thumb">
-                <img src="${item.thumbnail}" alt="${item.title}" onerror="this.parentElement.classList.add('no-img')">
-              </div>
-              <div class="card-info">
-                <div class="card-title">${item.title}</div>
-                <div class="card-desc">${item.desc}</div>
-              </div>
-            </a>
-          `).join('')}
-        </div>
-      </section>
-    `).join('');
+    function render(filterText = '') {
+      const filtered = data.map(group => ({
+        ...group,
+        items: group.items.filter(item => 
+          item.title.toLowerCase().includes(filterText.toLowerCase()) ||
+          item.desc.toLowerCase().includes(filterText.toLowerCase())
+        )
+      })).filter(group => group.items.length > 0);
+
+      const app = document.getElementById('app');
+      app.innerHTML = filtered.map(group => `
+        <section>
+          <div class="group-header">
+            <span class="arrow">▾</span>
+            <span class="group-title">${group.category}</span>
+            <span class="count">${group.items.length}</span>
+          </div>
+          <div class="grid">
+            ${group.items.map(item => `
+              <a class="card" href="${item.link}" target="_blank">
+                <div class="thumb">
+                  <img src="${item.thumbnail}" alt="${item.title}">
+                </div>
+                <div class="card-info">
+                  <div class="card-title">${item.title}</div>
+                  <div class="card-desc">${item.desc}</div>
+                </div>
+              </a>
+            `).join('')}
+          </div>
+        </section>
+      `).join('');
+    }
+
+    document.getElementById('search').addEventListener('input', e => {
+      render(e.target.value);
+    });
+
+    render();
   </script>
 </body>
 </html>
