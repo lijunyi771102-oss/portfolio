@@ -7,32 +7,73 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>我的项目展示</h1>
-    <p>这里放一句介绍自己的话</p>
-  </header><main id="projects"></main>
-  <script>
-  const projects = [
-    {
-      title: "项目名称",
-      description: "一句话描述",
-      thumbnail: "thumbnails/project1.png",
-      link: "https://github.com/lijunyi771102-oss",
-      tags: ["HTML", "CSS"]
-    }
-  ];
+  <aside>
+    <div class="logo">我的主页</div>
+    <nav>
+      <a href="#" class="active">📁 项目展示</a>
+    </nav>
+  </aside>
 
-  const container = document.getElementById('projects');
-  container.innerHTML = projects.map(p => `
-    <a class="card" href="${p.link}" target="_blank">
-      <img src="${p.thumbnail}" alt="${p.title}">
-      <div class="info">
-        <h2>${p.title}</h2>
-        <p>${p.description}</p>
-        <div class="tags">${p.tags.map(t => `<span>${t}</span>`).join('')}</div>
-      </div>
-    </a>
-  `).join('');
-</script>
+  <main>
+    <h1>项目展示</h1>
+    <div id="app"></div>
+  </main>
+
+  <script>
+    const data = [
+      {
+        category: "个人项目",
+        items: [
+          {
+            title: "项目名称一",
+            desc: "项目简短描述",
+            thumbnail: "thumbnails/project1.png",
+            link: "https://github.com/lijunyi771102-oss"
+          },
+          {
+            title: "项目名称二",
+            desc: "项目简短描述",
+            thumbnail: "thumbnails/project2.png",
+            link: "https://github.com/lijunyi771102-oss"
+          }
+        ]
+      },
+      {
+        category: "学习笔记",
+        items: [
+          {
+            title: "笔记一",
+            desc: "笔记描述",
+            thumbnail: "thumbnails/note1.png",
+            link: "#"
+          }
+        ]
+      }
+    ];
+
+    const app = document.getElementById('app');
+    app.innerHTML = data.map(group => `
+      <section>
+        <div class="group-header">
+          <span class="arrow">▾</span>
+          <span class="group-title">${group.category}</span>
+          <span class="count">${group.items.length}</span>
+        </div>
+        <div class="grid">
+          ${group.items.map(item => `
+            <a class="card" href="${item.link}" target="_blank">
+              <div class="thumb">
+                <img src="${item.thumbnail}" alt="${item.title}" onerror="this.parentElement.classList.add('no-img')">
+              </div>
+              <div class="card-info">
+                <div class="card-title">${item.title}</div>
+                <div class="card-desc">${item.desc}</div>
+              </div>
+            </a>
+          `).join('')}
+        </div>
+      </section>
+    `).join('');
+  </script>
 </body>
 </html>
